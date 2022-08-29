@@ -1,5 +1,4 @@
 import asyncio
-import configparser
 import json
 import logging
 import os
@@ -75,9 +74,9 @@ valid_record_path_name = {
 valid_record_id = {1, 2, 6, 45, 100, 343, 1029, 7678, 21345, 8765, 4567, 9876}
 
 
-@pytest.fixture(scope="session")
-def data_directory(tmpdir_factory):
-    return tmpdir_factory.mktemp("data")
+# @pytest.fixture(scope="session")
+# def data_directory(tmpdir_factory):
+#     return tmpdir_factory.mktemp("data")
 
 
 # @pytest.mark.asyncio
@@ -94,11 +93,11 @@ def data_directory(tmpdir_factory):
 
 @pytest.mark.parametrize("record_id", valid_record_id)
 @pytest.mark.asyncio
-async def test_get_record_with_valid_record_id_and_valid_100_sample_rate(record_id, caplog, data_directory):
+async def test_get_record_with_valid_record_id_and_valid_100_sample_rate(record_id, caplog):
     with caplog.at_level(level=module_logging_level(), logger=logger_name()):
         # Arrange
-        print(data_directory)
-        sut = PtbXl(data_location=data_directory)
+        # print(data_directory)
+        sut = PtbXl()
         # Act
         record_task = asyncio.create_task(sut.get_record(record_id=record_id, sample_rate=100))
         result = await record_task
@@ -115,11 +114,11 @@ async def test_get_record_with_valid_record_id_and_valid_100_sample_rate(record_
 
 @pytest.mark.parametrize("record_id", valid_record_id)
 @pytest.mark.asyncio
-async def test_get_record_with_valid_record_id_and_valid_500_sample_rate(record_id, caplog, data_directory):
+async def test_get_record_with_valid_record_id_and_valid_500_sample_rate(record_id, caplog):
     with caplog.at_level(level=module_logging_level(), logger=logger_name()):
         # Arrange
-        print(data_directory)
-        sut = PtbXl(data_location=data_directory)
+
+        sut = PtbXl()
         # Act
         record_task = asyncio.create_task(sut.get_record(record_id=record_id))
         result = await record_task
@@ -149,9 +148,9 @@ valid_record_path_name_to_json = {
 
 @pytest.mark.parametrize("record_id", valid_record_id)
 @pytest.mark.asyncio
-async def test_get_record_with_valid_path_write_to_json(record_id, caplog, data_directory):
+async def test_get_record_with_valid_path_write_to_json(record_id, caplog, tmp_path):
     with caplog.at_level(level=module_logging_level(), logger=logger_name()):
-        sut = PtbXl(data_location=data_directory)
+        sut = PtbXl()
         # record_task = asyncio.create_task(sut.get_record(record_path_name=record_path_name))
         record_task = asyncio.create_task(sut.get_record(record_id=record_id))
         result = await record_task
@@ -159,7 +158,7 @@ async def test_get_record_with_valid_path_write_to_json(record_id, caplog, data_
         # print(result)
         json_value = result.json(by_alias=True)
         file_name = result.record_name + ".json"
-        file_path = os.path.join(data_directory, file_name)
+        file_path = os.path.join(tmp_path, file_name)
         # cleanup_test_json_data(file_name=file_name)
         with open(file_path, "w") as outfile:
             json.dump(json_value, outfile)
@@ -173,27 +172,27 @@ async def test_get_record_with_valid_path_write_to_json(record_id, caplog, data_
         # cleanup_test_json_data(file_name=file_name)
 
 
-def test_read_ini(tmpdir, caplog):
-    with caplog.at_level(level=module_logging_level(), logger=logger_name()):
-        print(tmpdir)  # /private/var/folders/ry/z60xxmw0000gn/T/pytest-of-gabor/pytest-14/test_read0
-        d = tmpdir.mkdir("subdir")
-        fh = d.join("config.ini")
-        fh.write(
-            """
-            [application]
-            user  =  foo
-            password = secret"""
-        )
-
-        print(fh.basename)  # data.txt
-        print(fh.dirname)  # /private/var/folders/ry/z60xxmw0000gn/T/pytest-of-gabor/pytest-14/test_read0/subdir
-        filename = os.path.join(fh.dirname, fh.basename)
-
-        config = configparser.ConfigParser()
-        config.read(filename)
-
-        assert config.sections() == ["application"]
-        assert config["application"], {"user": "foo", "password": "secret"}
+# def test_read_ini(tmp_path, caplog):
+#     with caplog.at_level(level=module_logging_level(), logger=logger_name()):
+#         print(tmp_path)  # /private/var/folders/ry/z60xxmw0000gn/T/pytest-of-gabor/pytest-14/test_read0
+#         d = tmp_path.mkdir("subdir")
+#         fh = d.join("config.ini")
+#         fh.write(
+#             """
+#             [application]
+#             user  =  foo
+#             password = secret"""
+#         )
+#
+#         print(fh.basename)  # data.txt
+#         print(fh.dirname)  # /private/var/folders/ry/z60xxmw0000gn/T/pytest-of-gabor/pytest-14/test_read0/subdir
+#         filename = os.path.join(fh.dirname, fh.basename)
+#
+#         config = configparser.ConfigParser()
+#         config.read(filename)
+#
+#         assert config.sections() == ["application"]
+#         assert config["application"], {"user": "foo", "password": "secret"}
 
 
 invalid_record_path_name = {
@@ -242,7 +241,7 @@ def test_get_scp_code(caplog):
         assert codes.description == "non-diagnostic T abnormalities"
 
 
-def test_metadata_is_loaded_true(caplog, data_directory):
+def test_metadata_is_loaded_true(caplog):
     with caplog.at_level(level=module_logging_level(), logger=logger_name()):
-        sut = PtbXl(data_location=data_directory)
+        sut = PtbXl()
         assert sut.is_loaded() is True

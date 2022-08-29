@@ -1,6 +1,7 @@
 import asyncio
 import functools
 import os
+import pathlib
 import re
 from io import StringIO
 
@@ -12,6 +13,7 @@ import wfdb
 from pydantic.dataclasses import dataclass
 from wfdb import Record
 
+from definitions import ROOT_DIR
 from ecgai_data_physionet.models.diagnostic_code import DiagnosticCode
 from ecgai_data_physionet.models.ecg import EcgRecord
 from ecgai_data_physionet.physionet import (
@@ -65,10 +67,14 @@ class PtbXl(PhysioNetDataSet):
 
     # @log
     def load(self):
-        if not os.path.isfile(self.get_database_metadata_file_path()):
+        if not pathlib.Path(self.get_database_metadata_file_path()).is_file():
             self.download_database_metadata()
-        if not os.path.isfile(self.get_scp_codes_file_path()):
+        if not pathlib.Path(self.get_scp_codes_file_path()).is_file():
             self.download_scp_codes()
+        # if not os.path.isfile(self.get_database_metadata_file_path()):
+        #     self.download_database_metadata()
+        # if not os.path.isfile(self.get_scp_codes_file_path()):
+        #     self.download_scp_codes()
 
     # @log
     def is_loaded(self) -> bool:
@@ -83,7 +89,14 @@ class PtbXl(PhysioNetDataSet):
         database_metadata_filename: str = "ptbxl_database.csv",
         scp_code_filename: str = "scp_statements.csv",
     ):
-        self.data_location = data_location
+        path = pathlib.Path(ROOT_DIR, data_location)
+        path.mkdir(parents=True, exist_ok=True)
+        # if not pathlib.Path(path).is_dir():
+        #     folder = pathlib.Path(path).parent
+        #
+        # # path = pathlib.Path(pathlib.Path.cwd(),data_location)
+        # pathlib.Path(path).parent.mkdir(parents=True, exist_ok=True)
+        self.data_location = path
         self.database_metadata_filename = database_metadata_filename
         self.scp_code_filename = scp_code_filename
         super(PtbXl, self).__init__("ptb-xl")
@@ -209,10 +222,13 @@ class PtbXl(PhysioNetDataSet):
         return diagnostic_codes
 
     def get_database_metadata_file_path(self):
-        return os.path.abspath(os.path.join(self.data_location, self.database_metadata_filename))
+        return pathlib.Path(self.data_location, self.database_metadata_filename)
+        # return os.path.abspath(os.path.join(self.data_location, self.database_metadata_filename))
 
     def get_scp_codes_file_path(self):
-        return os.path.abspath(os.path.join(self.data_location, self.scp_code_filename))
+        return pathlib.Path(self.data_location, self.scp_code_filename)
+
+        # return os.path.abspath(os.path.join(self.data_location, self.scp_code_filename))
 
     def get_database_metadata(self, record_id: int) -> MetaDataRow:
         data_row = self.get_database_metadata_row(record_id)
@@ -237,12 +253,12 @@ class PtbXl(PhysioNetDataSet):
         content = requests.get(url).content
         metadata = pd.read_csv(StringIO(content.decode("utf-8")), index_col=0)
         metadata.to_csv(self.get_database_metadata_file_path())
-        if not os.path.isfile(self.get_database_metadata_file_path()):
+        if not pathlib.Path(self.get_database_metadata_file_path()).is_file():
             raise FileNotDownloadedException(self.database_metadata_filename)
         # return url
 
     def get_scp_code_description(self, scp_code):
-        if not os.path.isfile(self.get_scp_codes_file_path()):
+        if not pathlib.Path(self.get_scp_codes_file_path()).is_file():
             raise FileNotDownloadedException(filename="scp_statements.csv")
         data_frame = pd.read_csv(self.get_scp_codes_file_path(), index_col=0)
         data_row = data_frame.loc[scp_code]
