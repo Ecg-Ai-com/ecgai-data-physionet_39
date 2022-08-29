@@ -5,7 +5,6 @@ from typing import List
 
 import numpy as np
 import pytest
-from fluentcheck import Is
 
 from ecgai_data_physionet.models.diagnostic_code import DiagnosticCode
 from ecgai_data_physionet.models.ecg import EcgRecord
@@ -62,6 +61,8 @@ def test_create_description_code(caplog):
         scp_code = "DEF"
         description = "This is my class"
         sut = DiagnosticCode.create(scp_code=scp_code, description=description)
-        Is(sut).of_type(DiagnosticCode)
-        Is(sut.scp_code).not_empty.matches(scp_code)
-        Is(sut.description).not_empty.matches(description)
+        assert type(sut) is DiagnosticCode
+        assert sut.scp_code == scp_code
+        assert sut.description == description
+        # Is(sut.scp_code).not_empty.matches(scp_code)
+        # Is(sut.description).not_empty.matches(description)

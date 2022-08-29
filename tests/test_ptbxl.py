@@ -5,7 +5,6 @@ import logging
 import os
 
 import pytest
-from fluentcheck import Is
 
 from ecgai_data_physionet.models.diagnostic_code import DiagnosticCode
 from ecgai_data_physionet.models.ecg import EcgRecord
@@ -104,7 +103,7 @@ async def test_get_record_with_valid_record_id_and_valid_100_sample_rate(record_
         record_task = asyncio.create_task(sut.get_record(record_id=record_id, sample_rate=100))
         result = await record_task
         # Assert
-        Is(result).of_type(EcgRecord)
+        assert type(result) is EcgRecord
         # name = os.path.basename(record_name)
         assert result.record_id == record_id
         assert result.sample_rate == 100
@@ -125,7 +124,7 @@ async def test_get_record_with_valid_record_id_and_valid_500_sample_rate(record_
         record_task = asyncio.create_task(sut.get_record(record_id=record_id))
         result = await record_task
         # Assert
-        Is(result).of_type(EcgRecord)
+        assert type(result) is EcgRecord
         # name = os.path.basename(record_name)
         assert result.record_id == record_id
         assert result.sample_rate == 500
@@ -229,7 +228,8 @@ def test_get_database_metadata(caplog):
     with caplog.at_level(level=module_logging_level(), logger=logger_name()):
         sut = PtbXl()
         codes = sut.get_database_metadata(100)
-        Is(codes).of_type(MetaDataRow)
+        assert type(codes) is MetaDataRow
+
         assert codes.ecg_id == 100
 
 
@@ -237,7 +237,8 @@ def test_get_scp_code(caplog):
     with caplog.at_level(level=module_logging_level(), logger=logger_name()):
         sut = PtbXl()
         codes = sut.get_scp_code_description("NDT")
-        Is(codes).of_type(DiagnosticCode)
+        assert type(codes) is DiagnosticCode
+
         assert codes.description == "non-diagnostic T abnormalities"
 
 
