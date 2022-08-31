@@ -5,9 +5,9 @@ import os
 
 import pytest
 
+from ecgai_data_physionet.exceptions import InValidRecordError, InValidSampleRateError
 from ecgai_data_physionet.models.diagnostic_code import DiagnosticCode
 from ecgai_data_physionet.models.ecg import EcgRecord
-from ecgai_data_physionet.physionet import InValidRecordException
 from ecgai_data_physionet.ptbxl import MetaDataRow, PtbXl
 
 invalid_sample_rate = {0, -1, 55, 3256}
@@ -33,7 +33,7 @@ def test_fixture(tmp_path):
 async def test_get_records_list_invalid_sample_rate_raise_exception(sample_rate: int, caplog):
     with caplog.at_level(level=module_logging_level(), logger=logger_name()):
         sut = PtbXl()
-        with pytest.raises(ValueError):
+        with pytest.raises(InValidSampleRateError):
             await sut.get_record(record_id=1, sample_rate=sample_rate)
 
 
@@ -207,12 +207,16 @@ invalid_record_path_name = {
 invalid_record_id = {23423423, 35634534, 234234, 123123, 3643634}
 
 
+# class InValidRecordException:
+#     pass
+
+
 @pytest.mark.parametrize("record_id", invalid_record_id)
 @pytest.mark.asyncio
 async def test_get_record_with_invalid_path_raise_exception(record_id, caplog):
     with caplog.at_level(level=module_logging_level(), logger=logger_name()):
         sut = PtbXl()
-        with pytest.raises(InValidRecordException):
+        with pytest.raises(InValidRecordError):
             await sut.get_record(record_id=record_id)
 
 

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ecgai-data-physionet"
-version = "0.1.0"
+version = "0.1.1"
 description = ""
 authors = ["RobC <rob.clapham@gmail.com>"]
 
@@ -11,7 +11,7 @@ numpy = "^1.23.2"
 aenum = "^3.1.11"
 betterproto = {extras = ["compiler"], version = "^2.0.0b5"}
 grpclib = {extras = ["protobuf"], version = "^0.4.3"}
-pydantic = "^1.9.2"
+pydantic = "^1.10.1"
 wfdb = "^4.0.0"
 
 

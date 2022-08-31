@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
 
 import numpy as np
-from numpy.distutils.fcompiler import none
 from wfdb import Record
 
 from ecgai_data_physionet.models.ecg import EcgRecord
@@ -146,20 +145,3 @@ class PhysioNetDataSet(IPhysioNetDataSet):
 
         except Exception as e:
             print("Unexpected error:", e.args)
-
-
-class InValidRecordException(Exception):
-    # @log
-    def __init__(self, record_id: int = none, data_base_name: str = none):
-        message = "The record was not found"
-        if record_id is not none:
-            message += f" record_id {record_id}"
-        if data_base_name is not none:
-            message += f" from {data_base_name}"
-        super(InValidRecordException, self).__init__(message)
-
-
-class FileNotDownloadedException(Exception):
-    def __init__(self, filename: str):
-        message = f"{filename} was not downloaded"
-        super(FileNotDownloadedException, self).__init__(message)

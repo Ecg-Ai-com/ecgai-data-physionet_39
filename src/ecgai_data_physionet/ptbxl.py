@@ -14,13 +14,14 @@ from pydantic.dataclasses import dataclass
 from wfdb import Record
 
 from definitions import ROOT_DIR
+from ecgai_data_physionet.exceptions import (
+    FileNotDownloadedError,
+    InValidRecordError,
+    InValidSampleRateError,
+)
 from ecgai_data_physionet.models.diagnostic_code import DiagnosticCode
 from ecgai_data_physionet.models.ecg import EcgRecord
-from ecgai_data_physionet.physionet import (
-    FileNotDownloadedException,
-    InValidRecordException,
-    PhysioNetDataSet,
-)
+from ecgai_data_physionet.physionet import PhysioNetDataSet
 
 
 @dataclass
@@ -163,7 +164,7 @@ class PtbXl(PhysioNetDataSet):
             wfdb_record = await record_task
             if type(wfdb_record) is not Record:
                 # Should never be called
-                raise InValidRecordException(record_id=record_id, data_base_name=self.data_set_name)
+                raise InValidRecordError(record_id=record_id, data_base_name=self.data_set_name)
             record = await self.create_ecg_record(record_id=record_id, wfdb_record=wfdb_record)
             # record = EcgRecord.create_from_record(record=wfdb_record)
             return record
@@ -173,14 +174,14 @@ class PtbXl(PhysioNetDataSet):
 
     async def get_record_path(self, record_id, sample_rate: int = 500):
         if not self.is_valid_sample_rate(sample_rate):
-            raise ValueError()
+            raise InValidSampleRateError(sample_rate=sample_rate)
         if not self.is_valid_record_id(record_id):
-            raise InValidRecordException(record_id=record_id)
+            raise InValidRecordError(record_id=record_id)
 
         try:
             data_row = self.get_database_metadata_row(record_id=record_id)
         except KeyError as e:
-            raise InValidRecordException(record_id=record_id) from e
+            raise InValidRecordError(record_id=record_id) from e
         path: str
         if sample_rate == 500:
             path = data_row["filename_hr"]
@@ -243,7 +244,7 @@ class PtbXl(PhysioNetDataSet):
 
     def get_database_metadata_row(self, record_id: int):
         if not os.path.isfile(self.get_database_metadata_file_path()):
-            raise FileNotDownloadedException(filename="ptbxl_database.csv")
+            raise FileNotDownloadedError(filename="ptbxl_database.csv")
         data_frame = pd.read_csv(self.get_database_metadata_file_path())
         data_frame.set_index("ecg_id", inplace=True)
         return data_frame.loc[record_id]
@@ -254,12 +255,12 @@ class PtbXl(PhysioNetDataSet):
         metadata = pd.read_csv(StringIO(content.decode("utf-8")), index_col=0)
         metadata.to_csv(self.get_database_metadata_file_path())
         if not pathlib.Path(self.get_database_metadata_file_path()).is_file():
-            raise FileNotDownloadedException(self.database_metadata_filename)
+            raise FileNotDownloadedError(self.database_metadata_filename)
         # return url
 
     def get_scp_code_description(self, scp_code):
         if not pathlib.Path(self.get_scp_codes_file_path()).is_file():
-            raise FileNotDownloadedException(filename="scp_statements.csv")
+            raise FileNotDownloadedError(filename="scp_statements.csv")
         data_frame = pd.read_csv(self.get_scp_codes_file_path(), index_col=0)
         data_row = data_frame.loc[scp_code]
         return DiagnosticCode.create(scp_code=scp_code, description=data_row[0])
@@ -271,4 +272,4 @@ class PtbXl(PhysioNetDataSet):
         metadata = pd.read_csv(StringIO(content.decode("utf-8")), index_col=0)
         metadata.to_csv(self.get_scp_codes_file_path())
         if not os.path.isfile(self.get_scp_codes_file_path()):
-            raise FileNotDownloadedException(self.scp_code_filename)
+            raise FileNotDownloadedError(self.scp_code_filename)
