@@ -8,9 +8,6 @@ from io import StringIO
 import pandas as pd
 import requests
 import wfdb
-
-# from ecgai_logging.log_decorator import log
-from pydantic.dataclasses import dataclass
 from wfdb import Record
 
 from definitions import ROOT_DIR
@@ -24,7 +21,7 @@ from ecgai_data_physionet.models.ecg import EcgRecord
 from ecgai_data_physionet.physionet import PhysioNetDataSet
 
 
-@dataclass
+# @dataclass
 class MetaDataRow:
     def __init__(self, ecg_id, patient_id, age, sex, report, scp_codes):
         self.ecg_id = ecg_id
@@ -44,7 +41,7 @@ class MetaDataRow:
         self.scp_codes = codes
 
 
-@dataclass
+# @dataclass
 class MetaDataCode:
     def __init__(self, code, confidence):
         self.code = code
