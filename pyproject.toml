@@ -9,8 +9,6 @@ authors = ["RobC <rob.clapham@gmail.com>"]
 python = "^3.10,<3.12"
 numpy = "^1.23.2"
 aenum = "^3.1.11"
-betterproto = {extras = ["compiler"], version = "^2.0.0b5"}
-grpclib = {extras = ["protobuf"], version = "^0.4.3"}
 pydantic = "^1.10.1"
 wfdb = "^4.0.0"
 
