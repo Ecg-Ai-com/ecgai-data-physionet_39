@@ -16,6 +16,6 @@
 # constant (in any of the other files) with the import statement (e.g. in utils.py): from definitions import
 # CONFIG_PATH.
 # https://stackoverflow.com/questions/25389095/python-get-path-of-root-project-structure/53465812
-import pathlib
+# import pathlib
 
-ROOT_DIR = pathlib.Path(__file__).parent.absolute()
+# ROOT_DIR = pathlib.Path(__file__).parent.absolute()

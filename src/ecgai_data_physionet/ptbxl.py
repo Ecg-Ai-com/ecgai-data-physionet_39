@@ -10,7 +10,6 @@ import requests
 import wfdb
 from wfdb import Record
 
-from definitions import ROOT_DIR
 from ecgai_data_physionet.exceptions import (
     FileNotDownloadedError,
     InValidRecordError,
@@ -19,6 +18,8 @@ from ecgai_data_physionet.exceptions import (
 from ecgai_data_physionet.models.diagnostic_code import DiagnosticCode
 from ecgai_data_physionet.models.ecg import EcgRecord
 from ecgai_data_physionet.physionet import PhysioNetDataSet
+
+ROOT_DIR = pathlib.Path(__file__).parent.absolute()
 
 
 # @dataclass
@@ -69,10 +70,6 @@ class PtbXl(PhysioNetDataSet):
             self.download_database_metadata()
         if not pathlib.Path(self.get_scp_codes_file_path()).is_file():
             self.download_scp_codes()
-        # if not os.path.isfile(self.get_database_metadata_file_path()):
-        #     self.download_database_metadata()
-        # if not os.path.isfile(self.get_scp_codes_file_path()):
-        #     self.download_scp_codes()
 
     # @log
     def is_loaded(self) -> bool:

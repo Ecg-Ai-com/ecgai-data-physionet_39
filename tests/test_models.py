@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import pathlib
 from typing import List
 
 import numpy as np
@@ -14,14 +15,15 @@ def module_logging_level():
     return logging.ERROR
 
 
+ROOT_DIR = pathlib.Path(__file__).parent.absolute()
+
+
 def logger_name():
     return "models"
 
 
 def setup_test_record_data():
-    from definitions import ROOT_DIR
-
-    path = os.path.join(ROOT_DIR, "tests", "test_data", "00001_hr.json")
+    path = os.path.join(ROOT_DIR, "test_data", "00001_hr.json")
     with open(path) as json_file:
         data = json.load(json_file)
     record = EcgRecord.from_json(data)
