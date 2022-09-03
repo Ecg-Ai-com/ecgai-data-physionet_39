@@ -4,7 +4,6 @@ import os
 from typing import List
 
 import numpy as np
-import pytest
 
 from ecgai_data_physionet.models.diagnostic_code import DiagnosticCode
 from ecgai_data_physionet.models.ecg import EcgRecord
@@ -30,7 +29,6 @@ def setup_test_record_data():
     return record
 
 
-@pytest.mark.asyncio
 def test_create_data_set_record(caplog):
     # try:
     with caplog.at_level(level=module_logging_level(), logger=logger_name()):
@@ -49,7 +47,6 @@ def test_create_data_set_record(caplog):
         assert type(record) is EcgRecord
 
 
-@pytest.mark.asyncio
 def test_read_from_json(caplog):
     with caplog.at_level(level=module_logging_level(), logger=logger_name()):
         record = setup_test_record_data()

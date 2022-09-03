@@ -92,6 +92,7 @@ valid_record_id = {1, 2, 6, 45, 100, 343, 1029, 7678, 21345, 8765, 4567, 9876}
 
 
 @pytest.mark.parametrize("record_id", valid_record_id)
+@pytest.mark.filterwarnings("ignore::DeprecationWarning")
 @pytest.mark.asyncio
 async def test_get_record_with_valid_record_id_and_valid_100_sample_rate(record_id, caplog):
     with caplog.at_level(level=module_logging_level(), logger=logger_name()):
@@ -113,6 +114,7 @@ async def test_get_record_with_valid_record_id_and_valid_100_sample_rate(record_
 
 
 @pytest.mark.parametrize("record_id", valid_record_id)
+@pytest.mark.filterwarnings("ignore::DeprecationWarning")
 @pytest.mark.asyncio
 async def test_get_record_with_valid_record_id_and_valid_500_sample_rate(record_id, caplog):
     with caplog.at_level(level=module_logging_level(), logger=logger_name()):
@@ -147,6 +149,7 @@ valid_record_path_name_to_json = {
 
 
 @pytest.mark.parametrize("record_id", valid_record_id)
+@pytest.mark.filterwarnings("ignore::DeprecationWarning")
 @pytest.mark.asyncio
 async def test_get_record_with_valid_path_write_to_json(record_id, caplog, tmp_path):
     with caplog.at_level(level=module_logging_level(), logger=logger_name()):
