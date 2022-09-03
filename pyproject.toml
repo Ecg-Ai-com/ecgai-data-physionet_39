@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ecgai-data-physionet"
-version = "0.1.1"
+version = "0.1.2"
 description = ""
 authors = ["RobC <rob.clapham@gmail.com>"]
 
@@ -11,6 +11,7 @@ numpy = "^1.23.2"
 aenum = "^3.1.11"
 pydantic = "^1.10.1"
 wfdb = "^4.0.0"
+pytest-asyncio = "^0.19.0"
 
 
 [tool.poetry.dev-dependencies]
