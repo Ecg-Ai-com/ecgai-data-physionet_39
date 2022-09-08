@@ -19,7 +19,7 @@ from ecgai_data_physionet.models.diagnostic_code import DiagnosticCode
 from ecgai_data_physionet.models.ecg import EcgRecord
 from ecgai_data_physionet.physionet import PhysioNetDataSet
 
-ROOT_DIR = pathlib.Path(__file__).parent.absolute()
+# ROOT_DIR = pathlib.Path(__file__).parent.absolute()
 
 
 # @dataclass
@@ -84,7 +84,7 @@ class PtbXl(PhysioNetDataSet):
         database_metadata_filename: str = "ptbxl_database.csv",
         scp_code_filename: str = "scp_statements.csv",
     ):
-        path = pathlib.Path(ROOT_DIR, data_location)
+        path = pathlib.Path(pathlib.Path.cwd(), data_location)
         path.mkdir(parents=True, exist_ok=True)
         # if not pathlib.Path(path).is_dir():
         #     folder = pathlib.Path(path).parent
