@@ -13,7 +13,7 @@ from wfdb import Record
 from ecgai_data_physionet.exceptions import (
     FileNotDownloadedError,
     InValidRecordError,
-    InValidSampleRateError,
+    InvalidSampleRateError,
 )
 from ecgai_data_physionet.models.diagnostic_code import DiagnosticCode
 from ecgai_data_physionet.models.ecg import EcgRecord
@@ -168,7 +168,7 @@ class PtbXl(PhysioNetDataSet):
 
     async def get_record_path(self, record_id, sample_rate: int = 500):
         if not self.is_valid_sample_rate(sample_rate):
-            raise InValidSampleRateError(sample_rate=sample_rate)
+            raise InvalidSampleRateError(sample_rate=sample_rate)
         if not self.is_valid_record_id(record_id):
             raise InValidRecordError(record_id=record_id)
 

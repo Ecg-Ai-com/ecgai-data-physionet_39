@@ -9,7 +9,7 @@ class InValidRecordError(Exception):
         super(InValidRecordError, self).__init__(message)
 
 
-class InValidSampleRateError(Exception):
+class InvalidSampleRateError(Exception):
     # @log
     def __init__(
         self,
@@ -23,7 +23,7 @@ class InValidSampleRateError(Exception):
             message += f" on record_id {record_id}"
         if data_base_name is not None:
             message += f" from {data_base_name}"
-        super(InValidSampleRateError, self).__init__(message)
+        super(InvalidSampleRateError, self).__init__(message)
 
 
 class FileNotDownloadedError(Exception):

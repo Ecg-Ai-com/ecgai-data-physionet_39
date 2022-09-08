@@ -5,7 +5,7 @@ import os
 
 import pytest
 
-from ecgai_data_physionet.exceptions import InValidRecordError, InValidSampleRateError
+from ecgai_data_physionet.exceptions import InValidRecordError, InvalidSampleRateError
 from ecgai_data_physionet.models.diagnostic_code import DiagnosticCode
 from ecgai_data_physionet.models.ecg import EcgRecord
 from ecgai_data_physionet.ptbxl import MetaDataRow, PtbXl
@@ -33,7 +33,7 @@ def test_fixture(tmp_path):
 async def test_get_records_list_invalid_sample_rate_raise_exception(sample_rate: int, caplog):
     with caplog.at_level(level=module_logging_level(), logger=logger_name()):
         sut = PtbXl()
-        with pytest.raises(InValidSampleRateError):
+        with pytest.raises(InvalidSampleRateError):
             await sut.get_record(record_id=1, sample_rate=sample_rate)
 
 
