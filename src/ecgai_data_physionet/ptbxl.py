@@ -218,12 +218,9 @@ class PtbXl(PhysioNetDataSet):
 
     def get_database_metadata_file_path(self):
         return pathlib.Path(self.data_location, self.database_metadata_filename)
-        # return os.path.abspath(os.path.join(self.data_location, self.database_metadata_filename))
 
     def get_scp_codes_file_path(self):
         return pathlib.Path(self.data_location, self.scp_code_filename)
-
-        # return os.path.abspath(os.path.join(self.data_location, self.scp_code_filename))
 
     def get_database_metadata(self, record_id: int) -> MetaDataRow:
         data_row = self.get_database_metadata_row(record_id)
