@@ -5,7 +5,7 @@ import os
 
 import pytest
 
-from ecgai_data_physionet.exceptions import InValidRecordError, InvalidSampleRateError
+from ecgai_data_physionet.exceptions import InvalidRecordError, InvalidSampleRateError
 from ecgai_data_physionet.models.diagnostic_code import DiagnosticCode
 from ecgai_data_physionet.models.ecg import EcgRecord
 from ecgai_data_physionet.ptbxl import MetaDataRow, PtbXl
@@ -209,6 +209,8 @@ invalid_record_path_name = {
 
 invalid_record_id = {23423423, 35634534, 234234, 123123, 3643634}
 
+does_not_exist_record_id = {456}
+
 
 # class InValidRecordException:
 #     pass
@@ -219,7 +221,16 @@ invalid_record_id = {23423423, 35634534, 234234, 123123, 3643634}
 async def test_get_record_with_invalid_path_raise_exception(record_id, caplog):
     with caplog.at_level(level=module_logging_level(), logger=logger_name()):
         sut = PtbXl()
-        with pytest.raises(InValidRecordError):
+        with pytest.raises(InvalidRecordError):
+            await sut.get_record(record_id=record_id)
+
+
+@pytest.mark.parametrize("record_id", does_not_exist_record_id)
+@pytest.mark.asyncio
+async def test_get_record_with_does_not_exist_record_id_raise_exception(record_id, caplog):
+    with caplog.at_level(level=module_logging_level(), logger=logger_name()):
+        sut = PtbXl()
+        with pytest.raises(InvalidRecordError):
             await sut.get_record(record_id=record_id)
 
 

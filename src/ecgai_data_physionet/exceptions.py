@@ -1,12 +1,19 @@
-class InValidRecordError(Exception):
+class InvalidRecordError(Exception):
     # @log
     def __init__(self, record_id: int = None, data_base_name: str = None):
-        message = "The record was not found"
+        message = ""
+        if record_id is not None and data_base_name is not None:
+            message = (
+                "The record was not found record_id {record_id} from {data_base_name}",
+                record_id,
+                data_base_name,
+            )
+
         if record_id is not None:
-            message += f" record_id {record_id}"
+            message = ("The record was not found record_id {record_id}", record_id)
         if data_base_name is not None:
-            message += f" from {data_base_name}"
-        super(InValidRecordError, self).__init__(message)
+            message = ("The record was not found from {data_base_name}", data_base_name)
+        super(InvalidRecordError, self).__init__(message)
 
 
 class InvalidSampleRateError(Exception):

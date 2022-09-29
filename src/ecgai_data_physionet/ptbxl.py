@@ -9,10 +9,11 @@ import pandas as pd
 import requests
 import wfdb
 from wfdb import Record
+from wfdb.io._url import NetFileNotFoundError
 
 from ecgai_data_physionet.exceptions import (
     FileNotDownloadedError,
-    InValidRecordError,
+    InvalidRecordError,
     InvalidSampleRateError,
 )
 from ecgai_data_physionet.models.diagnostic_code import DiagnosticCode
@@ -158,10 +159,13 @@ class PtbXl(PhysioNetDataSet):
             wfdb_record = await record_task
             if type(wfdb_record) is not Record:
                 # Should never be called
-                raise InValidRecordError(record_id=record_id, data_base_name=self.data_set_name)
+                raise InvalidRecordError(record_id=record_id, data_base_name=self.data_set_name)
             record = await self.create_ecg_record(record_id=record_id, wfdb_record=wfdb_record)
             # record = EcgRecord.create_from_record(record=wfdb_record)
             return record
+        except NetFileNotFoundError as e:
+            raise InvalidRecordError(record_id=record_id, data_base_name=self.data_set_name) from e
+
         except Exception as e:
             print("Unexpected error:", e.args)
             raise e
@@ -170,12 +174,12 @@ class PtbXl(PhysioNetDataSet):
         if not self.is_valid_sample_rate(sample_rate):
             raise InvalidSampleRateError(sample_rate=sample_rate)
         if not self.is_valid_record_id(record_id):
-            raise InValidRecordError(record_id=record_id)
+            raise InvalidRecordError(record_id=record_id)
 
         try:
             data_row = self.get_database_metadata_row(record_id=record_id)
         except KeyError as e:
-            raise InValidRecordError(record_id=record_id) from e
+            raise InvalidRecordError(record_id=record_id) from e
         path: str
         if sample_rate == 500:
             path = data_row["filename_hr"]
