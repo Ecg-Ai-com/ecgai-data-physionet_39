@@ -28,7 +28,10 @@ class MetaDataRow:
     def __init__(self, ecg_id, patient_id, age, sex, report, scp_codes):
         self.ecg_id = ecg_id
         self.patient_id: int = patient_id
-        self.age: int = age
+        if age.isnumeric():
+            self.age: int = int(age)
+        else:
+            self.age = 0
         define_sex = ("male", "female")
         self.sex: str = define_sex[sex]
         self.report = report
@@ -41,6 +44,8 @@ class MetaDataRow:
             codes.append(meta_data_code)
 
         self.scp_codes = codes
+
+    # def
 
 
 # @dataclass

@@ -9,6 +9,7 @@ import numpy as np
 from ecgai_data_physionet.models.diagnostic_code import DiagnosticCode
 from ecgai_data_physionet.models.ecg import EcgRecord
 from ecgai_data_physionet.models.ecg_lead import EcgLeadRecord
+from ecgai_data_physionet.ptbxl import MetaDataRow
 
 
 def module_logging_level():
@@ -65,3 +66,13 @@ def test_create_description_code(caplog):
         assert sut.description == description
         # Is(sut.scp_code).not_empty.matches(scp_code)
         # Is(sut.description).not_empty.matches(description)
+
+
+def test_meta_data_row_with_invalid_age():
+    sut = MetaDataRow(ecg_id=1, patient_id=1, age="asda", sex=0, report="ssd", scp_codes="test:34")
+    assert sut.age == 0
+
+
+def test_meta_data_row_with_valid_age():
+    sut = MetaDataRow(ecg_id=1, patient_id=1, age="78", sex=0, report="ssd", scp_codes="test:34")
+    assert sut.age == 78
