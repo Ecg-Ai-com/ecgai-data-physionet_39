@@ -71,7 +71,8 @@ valid_record_path_name = {
     "records100/21000/21837_lr",
 }
 
-valid_record_id = {1, 2, 6, 45, 100, 343, 1029, 7678, 21345, 8765, 4567, 9876}
+valid_record_id = {1228, 1, 2, 6, 45, 100, 343, 1029, 7678, 21345, 8765, 4567, 9876}
+# valid_record_id = {1228}
 
 
 # @pytest.fixture(scope="session")

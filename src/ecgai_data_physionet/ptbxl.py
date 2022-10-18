@@ -39,7 +39,7 @@ class MetaDataRow:
         codes = []
         for code_item in codes_list:
             c = code_item.split(":")
-            code = re.sub(r"[^a-zA-Z0-9_/]", "", c[0])
+            code = re.sub(r"[^a-zA-Z0-9_/()]", "", c[0])
             meta_data_code = MetaDataCode(code=code, confidence=c[1])
             codes.append(meta_data_code)
 
