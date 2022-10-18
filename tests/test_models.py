@@ -74,5 +74,5 @@ def test_meta_data_row_with_invalid_age():
 
 
 def test_meta_data_row_with_valid_age():
-    sut = MetaDataRow(ecg_id=1, patient_id=1, age="78", sex=0, report="ssd", scp_codes="test:34")
+    sut = MetaDataRow(ecg_id=1, patient_id=1, age="78.0", sex=0, report="ssd", scp_codes="test:34")
     assert sut.age == 78

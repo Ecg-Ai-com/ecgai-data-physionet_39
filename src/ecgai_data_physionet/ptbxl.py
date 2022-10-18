@@ -28,8 +28,8 @@ class MetaDataRow:
     def __init__(self, ecg_id, patient_id, age, sex, report, scp_codes):
         self.ecg_id = ecg_id
         self.patient_id: int = patient_id
-        if age.isnumeric():
-            self.age: int = int(age)
+        if age.replace(".", "", 1).isdigit():
+            self.age: int = int(float(age))
         else:
             self.age = 0
         define_sex = ("male", "female")
@@ -236,7 +236,7 @@ class PtbXl(PhysioNetDataSet):
         return MetaDataRow(
             ecg_id=record_id,
             patient_id=data_row["patient_id"],
-            age=data_row["age"],
+            age=str(data_row["age"]),
             sex=data_row["sex"],
             report=data_row["report"],
             scp_codes=data_row["scp_codes"],
