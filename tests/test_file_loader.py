@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import pathlib
 
 import pytest
 
@@ -35,6 +36,8 @@ invalid_record_path_name = {
 @pytest.mark.asyncio
 async def test_get_records_list_return_valid_ecg_record(record_path, caplog):
     with caplog.at_level(level=module_logging_level(), logger=logger_name()):
+        record_path = pathlib.Path(pathlib.Path(__file__).parent, record_path)
+
         data_set_name = "cpsc_2018"
         sut = FileLoader(data_set_name=data_set_name)
         record_task = asyncio.create_task(sut.get_record(record_path_name=record_path))
