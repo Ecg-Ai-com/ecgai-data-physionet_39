@@ -1,6 +1,3 @@
-import asyncio
-import functools
-
 import wfdb
 from wfdb import Record
 from wfdb.io._url import NetFileNotFoundError
@@ -21,19 +18,20 @@ class FileLoader(PhysioNetDataSet):
     def load(self):
         pass
 
-    async def get_record(self, record_path_name: str) -> EcgRecord:
+    def get_record(self, record_path_name: str) -> EcgRecord:
         try:
-            loop = asyncio.get_event_loop()
-            record_task = loop.run_in_executor(
-                None,
-                functools.partial(wfdb.rdrecord, record_name=record_path_name),
-            )
+            # loop = asyncio.get_event_loop()
+            # record_task = loop.run_in_executor(
+            #     None,
+            #     functools.partial(wfdb.rdrecord, record_name=record_path_name),
+            # )
 
-            wfdb_record = await record_task
+            # wfdb_record = await record_task
+            wfdb_record = wfdb.rdrecord(record_name=record_path_name)
             if type(wfdb_record) is not Record:
                 # Should never be called
                 raise InvalidRecordError(record_id=0, data_base_name=self.data_set_name)
-            record = await self.create_ecg_record(record_id=0, wfdb_record=wfdb_record)
+            record = self.create_ecg_record(record_id=0, wfdb_record=wfdb_record)
             return record
         except NetFileNotFoundError as e:
             raise InvalidRecordError(record_id=0, data_base_name=self.data_set_name) from e
@@ -51,7 +49,7 @@ class FileLoader(PhysioNetDataSet):
     def is_valid_record_id(record_id: int) -> bool:
         pass
 
-    async def create_ecg_record(self, record_id: int, wfdb_record: Record) -> EcgRecord:
+    def create_ecg_record(self, record_id: int, wfdb_record: Record) -> EcgRecord:
         signal_array = self.create_signal_array(wfdb_record)
         # record_id = int("".join(ch for ch in wfdb_record.record_name if ch.isdigit()))
         # meta_data = self.get_database_metadata(record_id)

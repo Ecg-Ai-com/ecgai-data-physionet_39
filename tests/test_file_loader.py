@@ -1,4 +1,3 @@
-import asyncio
 import logging
 import pathlib
 
@@ -40,8 +39,8 @@ async def test_get_records_list_return_valid_ecg_record(record_path, caplog):
 
         data_set_name = "cpsc_2018"
         sut = FileLoader(data_set_name=data_set_name)
-        record_task = asyncio.create_task(sut.get_record(record_path_name=record_path))
-        result = await record_task
+        record_task = sut.get_record(record_path_name=record_path)
+        result = record_task
         assert type(result) is EcgRecord
         # name = os.path.basename(record_name)
         assert result.database_name == data_set_name
@@ -58,4 +57,4 @@ async def test_get_record_with_does_not_exist_record_id_raise_exception(record_p
         data_set_name = "cpsc_2018"
         sut = FileLoader(data_set_name=data_set_name)
         with pytest.raises(InvalidRecordError):
-            await sut.get_record(record_path_name=record_path)
+            sut.get_record(record_path_name=record_path)
