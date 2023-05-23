@@ -1,0 +1,10 @@
+# 3.2.1. Low-pass filter
+# For low-pass filtering, we adopted the Butterworth filter, which is one of the most widely used filters in signal processing. The frequency response function of a low-pass Butterworth filter is expressed as follows:
+# (1)
+# where
+#  is the angular frequency in radian and
+#  is the number of poles in the filter. In our implementation, we set
+#  and
+#  to 314.16 rad/s (50 Hz) and 5, respectively.
+#
+# https://www-sciencedirect-com.ezproxy.herts.ac.uk/science/article/pii/S001048252200823X?via%3Dihub

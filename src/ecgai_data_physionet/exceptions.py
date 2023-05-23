@@ -1,18 +1,20 @@
 class InvalidRecordError(Exception):
     # @log
-    def __init__(self, record_id: int = None, data_base_name: str = None):
+    def __init__(self, record_id: int = None, data_base_name: str = None, file_path: str = None):
         message = ""
-        if record_id is not None and data_base_name is not None:
-            message = (
-                "The record was not found record_id {record_id} from {data_base_name}",
-                record_id,
-                data_base_name,
-            )
+        # if record_id is not None and data_base_name is not None:
+        #     message = (
+        #         "The record was not found record_id {record_id} from {data_base_name}",
+        #         record_id,
+        #         data_base_name,
+        #     )
 
         if record_id is not None:
-            message = ("The record was not found record_id {record_id}", record_id)
+            message = ("The record was not found record_id {record_id} ", record_id)
         if data_base_name is not None:
-            message = ("The record was not found from {data_base_name}", data_base_name)
+            message = ("The record was not found from {data_base_name} ", data_base_name)
+        if file_path is not None:
+            message += ("The record was not found file_path {file_path} ", file_path)
         super(InvalidRecordError, self).__init__(message)
 
 
