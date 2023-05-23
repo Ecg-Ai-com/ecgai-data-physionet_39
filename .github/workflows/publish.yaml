@@ -25,10 +25,10 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install poetry
 
-#       - name: Configure poetry
-#         env:
-#           pypi_token: ${{ secrets.PyPI_TOKEN }}
-#         run: poetry config pypi-token.pypi $pypi_token
+      - name: Configure poetry
+        env:
+          pypi_token: ${{ secrets.PyPI_TOKEN }}
+        run: poetry config pypi-token.pypi $pypi_token
 
       - name: Build and publish
         run: poetry publish --build
