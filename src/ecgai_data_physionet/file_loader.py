@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import wfdb
 from wfdb import Record
 from wfdb.io._url import NetFileNotFoundError
@@ -25,9 +27,9 @@ class FileLoader(PhysioNetDataSet):
             #     None,
             #     functools.partial(wfdb.rdrecord, record_name=record_path_name),
             # )
-
+            path_record_name = Path(record_path_name)
             # wfdb_record = await record_task
-            wfdb_record = wfdb.rdrecord(record_name=record_path_name)
+            wfdb_record = wfdb.rdrecord(record_name=str(path_record_name))
             if type(wfdb_record) is not Record:
                 # Should never be called
                 raise InvalidRecordError(record_id=0, data_base_name=self.data_set_name)
