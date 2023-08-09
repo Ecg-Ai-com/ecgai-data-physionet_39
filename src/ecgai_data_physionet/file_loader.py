@@ -1,3 +1,4 @@
+# import logging
 from pathlib import Path
 
 import wfdb
@@ -22,11 +23,7 @@ class FileLoader(PhysioNetDataSet):
 
     def get_record(self, record_path_name: str) -> EcgRecord:
         try:
-            # loop = asyncio.get_event_loop()
-            # record_task = loop.run_in_executor(
-            #     None,
-            #     functools.partial(wfdb.rdrecord, record_name=record_path_name),
-            # )
+
             path_record_name = Path(record_path_name)
             # wfdb_record = await record_task
             wfdb_record = wfdb.rdrecord(record_name=str(path_record_name))
@@ -36,12 +33,18 @@ class FileLoader(PhysioNetDataSet):
             record = self.create_ecg_record(record_id=0, wfdb_record=wfdb_record)
             return record
         except NetFileNotFoundError as e:
+            # TODO: Log this
             raise InvalidRecordError(record_id=0, data_base_name=self.data_set_name) from e
         except FileNotFoundError as e:
+            # TODO: Log this
             raise InvalidRecordError(record_id=0, data_base_name=self.data_set_name) from e
+
+            # logging.WARNING(f"File not found: {record_path_name}")
+            raise
         except Exception as e:
+            # TODO: Log this
             print("Unexpected error:", e.args)
-            raise e
+            raise
 
     @staticmethod
     def is_valid_sample_rate(sample_rate: int) -> bool:

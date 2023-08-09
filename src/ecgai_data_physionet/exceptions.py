@@ -39,3 +39,10 @@ class FileNotDownloadedError(Exception):
     def __init__(self, filename: str):
         message = f"{filename} was not downloaded"
         super(FileNotDownloadedError, self).__init__(message)
+
+
+#
+# class FileNotFound(Exception):
+#     def __init__(self, filename: str):
+#         message = f"{filename} was not found"
+#         super(FileNotFound, self).__init__(message)
