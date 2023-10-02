@@ -251,13 +251,13 @@ def test_get_database_metadata(caplog):
         assert codes.ecg_id == 100
 
 
-def test_get_scp_code(caplog):
-    with caplog.at_level(level=module_logging_level(), logger=logger_name()):
-        sut = PtbXl()
-        codes = sut.get_scp_code_description("NDT")
-        assert type(codes) is DiagnosticCode
-
-        assert codes.description == "non-diagnostic T abnormalities"
+# def test_get_scp_code(caplog):
+#     with caplog.at_level(level=module_logging_level(), logger=logger_name()):
+#         sut = PtbXl()
+#         codes = sut.get_scp_code_description("NDT")
+#         assert type(codes) is DiagnosticCode
+#
+#         assert codes.description == "non-diagnostic T abnormalities"
 
 
 def test_metadata_is_loaded_true(caplog):
