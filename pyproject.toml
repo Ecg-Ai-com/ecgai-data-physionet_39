@@ -1,12 +1,12 @@
 [tool.poetry]
 name = "ecgai-data-physionet"
-version = "0.1.23"
+version = "0.1.24"
 description = ""
 authors = ["RobC <rob.clapham@gmail.com>"]
 
 [tool.poetry.dependencies]
 #TODO change poetry version to <4.0, currently required by scipy
-python = "^3.9,<3.12"
+python = "^3.9"
 numpy = "^1"
 aenum = "^3"
 pydantic = "^1"
